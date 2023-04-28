@@ -3,6 +3,12 @@ from .forms import QuestionForm, AnswerForm
 from .models import Question, Answer
 
 
+def question_list(request):
+    questions = Question.objects.all().prefetch_related('answers')
+    context = {'questions': questions}
+    return render(request, 'question_list.html', context)
+
+
 def create_question(request):
     form = QuestionForm()
     if request.method == 'POST':
