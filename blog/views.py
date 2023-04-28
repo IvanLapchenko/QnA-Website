@@ -6,7 +6,7 @@ from .models import Question, Answer
 def question_list(request):
     questions = Question.objects.all().prefetch_related('answers')
     context = {'questions': questions}
-    return render(request, 'question_list.html', context)
+    return render(request, 'main.html', context)
 
 
 def create_question(request):
@@ -18,7 +18,7 @@ def create_question(request):
             question.author = request.user
             question.publish()
             return redirect('question_detail', pk=question.pk)
-    return render(request, 'create_question.html', {'form': form})
+    return render(request, 'main.html', {'form': form})
 
 
 def create_answer(request, question_pk):
@@ -33,5 +33,5 @@ def create_answer(request, question_pk):
             return redirect('question_detail', pk=question.pk)
     else:
         form = AnswerForm()
-    return render(request, 'create_answer.html', {'form': form, 'question': question})
+    return render(request, 'main.html', {'form': form, 'question': question})
 

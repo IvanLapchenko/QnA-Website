@@ -1,7 +1,8 @@
 from django.urls import path
-from .views import post_list, post_add
+from .views import question_list, create_question, create_answer
 
 urlpatterns = [
-    path('', post_list, name='post_list'),
-    path('add', post_add, name='post_add')
+    path('', question_list, name='question_list'),
+    path('create_question', create_question, name='create_question'),
+    path('create_answer', create_answer, name='create_answer')
 ]
