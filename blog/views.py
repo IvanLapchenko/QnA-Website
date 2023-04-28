@@ -1,21 +1,31 @@
-from django.shortcuts import render
-from django.views.decorators.csrf import csrf_exempt
-
-from .models import Question
-from .forms import AddPostForm
+from django.shortcuts import render, redirect
+from .forms import QuestionForm, AnswerForm
+from .models import Question, Answer
 
 
-def post_list(request):
-    posts = Question.objects.all()
-    print(posts)
-    return render(request, 'post_list.html', {'posts': posts})
-
-
-@csrf_exempt
-def post_add(request):
+def create_question(request):
+    form = QuestionForm()
     if request.method == 'POST':
-        form = AddPostForm(request.POST)
+        form = QuestionForm(request.POST)
         if form.is_valid():
-            print(form.data)
-    form = AddPostForm()
-    return render(request, 'post_add.html', {'form': form})
+            question = form.save(commit=False)
+            question.author = request.user
+            question.publish()
+            return redirect('question_detail', pk=question.pk)
+    return render(request, 'create_question.html', {'form': form})
+
+
+def create_answer(request, question_pk):
+    question = Question.objects.get(pk=question_pk)
+    if request.method == 'POST':
+        form = AnswerForm(request.POST)
+        if form.is_valid():
+            answer = form.save(commit=False)
+            answer.question = question
+            answer.author = request.user
+            answer.publish()
+            return redirect('question_detail', pk=question.pk)
+    else:
+        form = AnswerForm()
+    return render(request, 'create_answer.html', {'form': form, 'question': question})
+
