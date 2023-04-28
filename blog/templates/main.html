@@ -23,7 +23,7 @@
         {% endfor %}
 
         <!-- Add answer form -->
-        <h5 class="mt-3">Add an Answer</h5>
+        <h5 class="mt-3 text-center">Add an Answer</h5>
         <form action="create_answer" method="post">
           {% csrf_token %}
           {{ answer_form.as_p }}
