@@ -50,4 +50,4 @@ def search(request):
         'questions': questions,
         'query': query,
     }
-    return render(request, 'search.html', context)
+    return render(request, 'search_result.html', context)
