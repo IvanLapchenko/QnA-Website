@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from .forms import QuestionForm, AnswerForm
 from .models import Question, Answer
@@ -40,3 +41,13 @@ def create_answer(request):
         else:
             messages.error(request, 'There was an error posting your answer. Please try again.')
     return redirect('/')
+
+
+def search(request):
+    query = request.GET.get('q')
+    questions = Question.objects.filter(Q(title__icontains=query) | Q(text__icontains=query))
+    context = {
+        'questions': questions,
+        'query': query,
+    }
+    return render(request, 'search.html', context)
