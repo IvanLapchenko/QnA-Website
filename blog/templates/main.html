@@ -1,55 +1,43 @@
 {% extends 'base.html' %}
 
+{% block title %} Main {% endblock %}
+
 {% block content %}
-  <div class="container my-5" style="max-width: 800px;">
+
     {% if messages %}
-      <div class="messages">
-      {% for message in messages %}
-      <div class="alert alert-{{ message.tags }}">
-          {{ message }}
-      </div>
-      {% endfor %}
-      </div>
-  {% endif %}
-  <h1 class="text-center">Questions and Answers</h1>
+        <div class="messages">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 
-  <!-- Display all questions -->
-  {% for question in questions %}
+
     <div class="card mb-3">
-      <div class="card-body">
-        <h5 class="card-title">{{ question.title }}</h5>
-        <p class="card-text">{{ question.text }}</p>
-        <p class="card-text"><small class="text-muted">{{ question.author }} - {{ question.published_date|date:"F j, Y" }}</small></p>
-
-        <!-- Display all answers to this question -->
-        {% for answer in question.answer_set.all %}
-          <div class="card mb-3">
-            <div class="card-body">
-              <p class="card-text">{{ answer.text }}</p>
-              <p class="card-text"><small class="text-muted">{{ answer.author }} - {{ answer.published_date|date:"F j, Y" }}</small></p>
-            </div>
-          </div>
-        {% endfor %}
-
-        <!-- Add answer form -->
-        <h5 class="mt-3 text-center">Add an Answer</h5>
-        <form action="create_answer" method="post">
-          {% csrf_token %}
-          {{ answer_form.as_p }}
-          <input type="hidden" name="question_pk" value="{{ question.pk }}">
-          <button type="submit" class="btn btn-primary float-right mt-2">Submit</button>
+        <h4 class="text-center mt-2">Ask a question</h4>
+        <form class="text-center mt-2" method="post" action="/create_question">
+            {% csrf_token %}
+            {{ question_form.as_p }}
+            <input class="btn btn-primary m-2" type="submit" value="Ask">
         </form>
-
-      </div>
     </div>
-  {% endfor %}
 
-  <!-- Add question form -->
-  <h2 class="text-center">Ask a Question</h2>
-  <form action="create_question" method="post">
-    {% csrf_token %}
-    {{ question_form.as_p }}
-    <button type="submit" class="btn btn-primary float-right mt-2">Submit</button>
-  </form>
-</div>
+
+    {% for question in questions %}
+        <div class="card mb-3">
+            <div class="card-body">
+                 <a href="{% url 'render_question_page' %}?id={{ question.id }}"
+                    class="list-group-item list-group-item-action">
+                        {{ question.title }}
+                </a>
+                <p class="card-text">
+                    <small class="text-muted">
+                        {{ question.author }} - {{ question.published_date }}
+                    </small>
+                </p>
+            </div>
+        </div>
+    {% endfor %}
 {% endblock %}
