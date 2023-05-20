@@ -3,6 +3,7 @@ from django.db.models import Q
 from django.shortcuts import render, redirect
 from .forms import QuestionForm, AnswerForm
 from .models import Question, Answer
+from .controllers import *
 
 
 def render_main_page(request):
