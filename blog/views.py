@@ -51,3 +51,23 @@ def search(request):
         'query': query,
     }
     return render(request, 'search_result.html', context)
+
+
+def render_categories_page(request):
+    return render(request, 'categories.html', {'categories': get_all_categories()})
+
+
+def render_question_page(request):
+    question_id = request.GET.get('id')
+    answer_form = AnswerForm()
+    return render(request, 'question.html', {'question': get_question_by_id(question_id),
+                                             'answers': get_answers_for_question(question_id),
+                                             'answer_form': answer_form})
+
+
+def edit_question(request, question_id):
+    return edit_record(request, Question, QuestionForm, question_id)
+
+
+def edit_answer(request, answer_id):
+    return edit_record(request, Answer, AnswerForm, answer_id)
