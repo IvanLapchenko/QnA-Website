@@ -4,10 +4,11 @@
     {% for category in categories %}
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">
-                    <a href="{% url 'question' %}?pk={{ question.id }}">{{ question.title }}</a>
-                </h5>
+                    <strong>
+                        <a href="{% url 'main_page' %}?id={{ category.id }}">{{ category.name }}</a>
+                    </strong>
             </div>
         </div>
     {% endfor %}
 {% endblock %}
+
