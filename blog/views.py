@@ -72,3 +72,10 @@ def edit_question(request, question_id):
 
 def edit_answer(request, answer_id):
     return edit_record(request, Answer, AnswerForm, answer_id)
+
+
+def render_ask_question_page(request):
+    question_form = QuestionForm()
+    return render(request, 'ask_question.html', {'question_form': question_form})
+
+
