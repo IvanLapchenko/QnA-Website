@@ -79,3 +79,10 @@ def render_ask_question_page(request):
     return render(request, 'ask_question.html', {'question_form': question_form})
 
 
+def delete_question(request, question_id):
+    return delete_record(request, Question, question_id)
+
+
+def delete_answer(request, answer_id):
+    return delete_record(request, Answer, answer_id)
+
