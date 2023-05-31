@@ -68,3 +68,7 @@ def delete_record(request, model_class, record_id):
         return redirect('/')
     else:
         return render(request, 'delete_record.html', {'model': model_class.__name__, 'record': record})
+
+
+def get_questions_for_user(user):
+    return Question.objects.filter(author=user)

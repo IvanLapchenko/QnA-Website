@@ -66,6 +66,11 @@ def render_question_page(request):
                                              'answer_form': answer_form})
 
 
+def render_user_page(request):
+    questions = get_questions_for_user(request.user)
+    return render(request, 'main.html', {'questions': questions})
+
+
 def edit_question(request, question_id):
     return edit_record(request, Question, QuestionForm, question_id)
 
