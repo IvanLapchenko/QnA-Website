@@ -8,7 +8,7 @@ urlpatterns = [
     path('create_answer', create_answer, name='create_answer'),
     path('search', search, name='search'),
     path('categories', render_categories_page, name='render_categories_page'),
-    path('question', render_question_page, name='render_question_page'),
+    path('question', render_question_page, name='question'),
     path('question/edit/<int:question_id>/', edit_question, name='edit_question'),
     path('answer/edit/<int:answer_id>/', edit_answer, name='edit_answer')
 ]

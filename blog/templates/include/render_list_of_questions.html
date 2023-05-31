@@ -1,0 +1,33 @@
+    {% for question in questions %}
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <a href="{% url 'question' %}?pk={{ question.id }}">{{ question.title }}</a>
+                </h5>
+                <p class="card-text">{{ question.text|truncatechars:100 }}</p>
+                <small class="text-muted">
+                    {{ question.author }} - {{ question.published_date|date:"F j, Y" }}
+                </small>
+                <br>
+                {% if question.author == user %}
+                    <div class="mr-2 mt-2">
+                        <button onclick="editQuestion()" data-id='{{ question.id }}' class="btn btn-warning btn-sm">Edit</button>
+                        <button onclick="deleteQuestion()" data-id='{{ question.id }}' class="btn btn-outline-dark btn-sm">Delete</button>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+    <script>
+        function editQuestion() {
+            let button = event.target;
+            let questionId = button.getAttribute('data-id');
+            window.location.href = `/Question/edit/${questionId}`;
+        }
+
+        function deleteQuestion () {
+            let button = event.target;
+            let questionId = button.getAttribute('data-id');
+            window.location.href = `/Question/delete/${questionId}`;
+        }
+    </script>

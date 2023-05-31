@@ -49,9 +49,9 @@ def search(request):
     questions = Question.objects.filter(Q(title__icontains=query) | Q(text__icontains=query))
     context = {
         'questions': questions,
-        'query': query,
+        'title': f'Search result for {query}',
     }
-    return render(request, 'search_result.html', context)
+    return render(request, 'main.html', context)
 
 
 def render_categories_page(request):

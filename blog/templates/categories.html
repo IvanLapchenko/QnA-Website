@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="list-group mt-8">
-        {% for category in categories %}
-            <a href="{% url 'render_main_page' %}?id={{ category.id }}"
-            class="list-group-item list-group-item-action">
-                {{ category.name }}
-            </a>
-        {% endfor %}
-    </div>
+    {% for category in categories %}
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <a href="{% url 'question_page' %}?pk={{ question.id }}">{{ question.title }}</a>
+                </h5>
+            </div>
+        </div>
+    {% endfor %}
 {% endblock %}
