@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from .forms import QuestionForm, AnswerForm
 from .models import Question, Answer
 from .controllers import *
+from django.contrib.auth.decorators import login_required
 
 
 def render_main_page(request):
@@ -72,12 +73,20 @@ def render_user_page(request):
     return render(request, 'main.html', {'questions': questions})
 
 
-def edit_question(request, question_id):
-    return edit_record(request, Question, QuestionForm, question_id)
+@login_required
+def edit_model(request, model, record_id):
+    object_class = Question if model == "Question" else Answer
+    form_class = QuestionForm if model == "Question" else AnswerForm
 
-
-def edit_answer(request, answer_id):
-    return edit_record(request, Answer, AnswerForm, answer_id)
+    record = get_object_or_404(object_class, pk=record_id)
+    if request.method == 'POST':
+        form = form_class(request.POST, instance=record)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+    else:
+        form = form_class(instance=record)
+        return render(request, 'edit_record.html', {'form': form, 'model': model})
 
 
 def render_ask_question_page(request):
@@ -85,10 +94,10 @@ def render_ask_question_page(request):
     return render(request, 'ask_question.html', {'question_form': question_form})
 
 
-def delete_question(request, question_id):
-    return delete_record(request, Question, question_id)
-
-
-def delete_answer(request, answer_id):
-    return delete_record(request, Answer, answer_id)
+@login_required
+def delete_model(request, model, record_id):
+    if model == 'Question':
+        return delete_record(request, Question, record_id)
+    elif model == 'Answer':
+        return delete_record(request, Answer, record_id)
 

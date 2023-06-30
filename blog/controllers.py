@@ -49,18 +49,6 @@ def create_answer_with_success_message(form, request):
     messages.success(request, message='Question asked!')
 
 
-def edit_record(request, model_class, form_class, record_id):
-    record = get_object_or_404(model_class, pk=record_id)
-    if request.method == 'POST':
-        form = form_class(request.POST, instance=record)
-        if form.is_valid():
-            form.save()
-            return redirect('/')
-    else:
-        form = form_class(instance=record)
-    return render(request, 'edit_record.html', {'form': form, 'model': record.__class__.__name__})
-
-
 def delete_record(request, model_class, record_id):
     record = get_object_or_404(model_class, pk=record_id)
     if request.method == 'POST':
