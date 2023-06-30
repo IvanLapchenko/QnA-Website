@@ -34,6 +34,7 @@ def create_answer(request):
         if form.is_valid():
             answer = form.save(commit=False)
             question_pk = request.POST.get('question_pk')
+            print(question_pk)
             question = Question.objects.get(pk=question_pk)
             answer.question = question
             answer.author = request.user
@@ -59,7 +60,7 @@ def render_categories_page(request):
 
 
 def render_question_page(request):
-    question_id = request.GET.get('id')
+    question_id = request.GET.get('pk')
     answer_form = AnswerForm()
     return render(request, 'question.html', {'question': get_question_by_id(question_id),
                                              'answers': get_answers_for_question(question_id),
