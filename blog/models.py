@@ -22,14 +22,14 @@ class BaseModel(models.Model):
     upvotes = ArrayField(models.IntegerField(default=0), default=list)
     downvotes = ArrayField(models.IntegerField(default=0), default=list)
 
-    def add_rating(self, user):
+    def upvote(self, user):
         if user not in self.upvotes:
             self.upvotes.append(user)
             if user in self.downvotes:
                 self.downvotes.remove(user)
         self.save()
 
-    def reduce_rating(self, user):
+    def downvote(self, user):
         if user not in self.downvotes:
             self.downvotes.append(user)
             if user in self.upvotes:

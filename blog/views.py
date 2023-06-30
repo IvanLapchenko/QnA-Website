@@ -126,4 +126,4 @@ def vote(request, model, action, record_id):
         print(e)
         resp_data = str(e)
 
-    return redirect(f'/question?id={redirect_id}')
+    return redirect(f'/question?pk={redirect_id}')
