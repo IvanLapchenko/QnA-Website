@@ -101,3 +101,29 @@ def delete_model(request, model, record_id):
     elif model == 'Answer':
         return delete_record(request, Answer, record_id)
 
+
+def vote(request, model, action, record_id):
+    model_mapping = {
+        'question': Question,
+        'answer': Answer
+    }
+    model_class = model_mapping.get(model)
+
+    record = get_object_or_404(model_class, pk=record_id)
+
+    if isinstance(record, Answer):
+        redirect_id = record.question.id
+    else:
+        redirect_id = record_id
+
+    try:
+        if action == 'upvote':
+            record.upvote(request.user.id)
+        elif action == 'downvote':
+            record.downvote(request.user.id)
+        resp_data = 'ok'
+    except Exception as e:
+        print(e)
+        resp_data = str(e)
+
+    return redirect(f'/question?id={redirect_id}')
