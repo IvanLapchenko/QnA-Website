@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from .forms import QuestionForm, AnswerForm
 from .models import Question, Answer
 from .controllers import *
+from django.contrib.auth.decorators import login_required
 
 
 def render_main_page(request):
@@ -34,6 +35,7 @@ def create_answer(request):
         if form.is_valid():
             answer = form.save(commit=False)
             question_pk = request.POST.get('question_pk')
+            print(question_pk)
             question = Question.objects.get(pk=question_pk)
             answer.question = question
             answer.author = request.user
@@ -59,7 +61,7 @@ def render_categories_page(request):
 
 
 def render_question_page(request):
-    question_id = request.GET.get('id')
+    question_id = request.GET.get('pk')
     answer_form = AnswerForm()
     return render(request, 'question.html', {'question': get_question_by_id(question_id),
                                              'answers': get_answers_for_question(question_id),
@@ -71,12 +73,20 @@ def render_user_page(request):
     return render(request, 'main.html', {'questions': questions})
 
 
-def edit_question(request, question_id):
-    return edit_record(request, Question, QuestionForm, question_id)
+@login_required
+def edit_model(request, model, record_id):
+    object_class = Question if model == "Question" else Answer
+    form_class = QuestionForm if model == "Question" else AnswerForm
 
-
-def edit_answer(request, answer_id):
-    return edit_record(request, Answer, AnswerForm, answer_id)
+    record = get_object_or_404(object_class, pk=record_id)
+    if request.method == 'POST':
+        form = form_class(request.POST, instance=record)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+    else:
+        form = form_class(instance=record)
+        return render(request, 'edit_record.html', {'form': form, 'model': model})
 
 
 def render_ask_question_page(request):
@@ -84,10 +94,36 @@ def render_ask_question_page(request):
     return render(request, 'ask_question.html', {'question_form': question_form})
 
 
-def delete_question(request, question_id):
-    return delete_record(request, Question, question_id)
+@login_required
+def delete_model(request, model, record_id):
+    if model == 'Question':
+        return delete_record(request, Question, record_id)
+    elif model == 'Answer':
+        return delete_record(request, Answer, record_id)
 
 
-def delete_answer(request, answer_id):
-    return delete_record(request, Answer, answer_id)
+def vote(request, model, action, record_id):
+    model_mapping = {
+        'question': Question,
+        'answer': Answer
+    }
+    model_class = model_mapping.get(model)
 
+    record = get_object_or_404(model_class, pk=record_id)
+
+    if isinstance(record, Answer):
+        redirect_id = record.question.id
+    else:
+        redirect_id = record_id
+
+    try:
+        if action == 'upvote':
+            record.upvote(request.user.id)
+        elif action == 'downvote':
+            record.downvote(request.user.id)
+        resp_data = 'ok'
+    except Exception as e:
+        print(e)
+        resp_data = str(e)
+
+    return redirect(f'/question?pk={redirect_id}')
