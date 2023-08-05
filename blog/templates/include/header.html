@@ -8,27 +8,27 @@
         <ul class="navbar-nav ml-auto">
             {% if user.is_authenticated %}
             <li class="nav-item">
-                <a class="nav-link" href="auth/logout/">Log out</a>
+                <a class="nav-link" href="/auth/logout/">Log out</a>
             </li>
             {% else %}
             <li class="nav-item">
-                <a class="nav-link" href="auth/login/">Log in</a>
+                <a class="nav-link" href="/auth/login/">Log in</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="auth/signup/">Signup</a>
+                <a class="nav-link" href="/auth/signup/">Signup</a>
             </li>
             {% endif %}
             <li class="nav-item active">
                 <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="categories">Categories</a>
+                <a class="nav-link" href="/categories">Categories</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="ask_question">Ask question</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="user_page">My questions</a>
+                <a class="nav-link" href="/user_page">My questions</a>
             </li>
         </ul>
         <form method="get" action='{% url "search" %}' class="form-inline my-2 my-lg-0">

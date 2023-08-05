@@ -1,19 +1,27 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.views import LoginView
+from django.views.generic import CreateView
+from django.urls import reverse_lazy
 from django.contrib import messages
+from .forms import SignupForm
 
 
-def register(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('login')
-        else:
-            errors = form.errors.as_data()
-            for field, error_msgs in errors.items():
-                for error_msg in error_msgs:
-                    messages.error(request, str(error_msg)[2:-3])
-    else:
-        form = UserCreationForm()
-    return render(request, 'registration/register.html', {'form': form})
+class SignupView(CreateView):
+    form_class = SignupForm
+    template_name = 'registration/signup.html'
+    success_url = reverse_lazy('login')
+
+    def form_invalid(self, form):
+        for errors in form.errors.values():
+            for error in errors:
+                messages.warning(self.request, error)
+
+        return super().form_invalid(form)
+
+
+class CustomLoginView(LoginView):
+    def form_invalid(self, form):
+        for errors in form.errors.values():
+            for error in errors:
+                messages.warning(self.request, error)
+
+        return super().form_invalid(form)
