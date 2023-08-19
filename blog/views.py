@@ -5,6 +5,7 @@ from .forms import QuestionForm, AnswerForm
 from .models import Question, Answer
 from .controllers import *
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import cache_page
 
 
 def render_main_page(request):
@@ -16,6 +17,7 @@ def render_main_page(request):
                                          'answer_form': answer_form})
 
 
+@cache_page(60 * 60)
 def create_question(request):
     if request.method == 'POST':
         form = QuestionForm(request.POST)
@@ -29,6 +31,7 @@ def create_question(request):
     return redirect('/')
 
 
+@cache_page(60 * 60)
 def create_answer(request):
     if request.method == 'POST':
         form = AnswerForm(request.POST)
@@ -56,6 +59,7 @@ def search(request):
     return render(request, 'main.html', context)
 
 
+@cache_page(60 * 60)
 def render_categories_page(request):
     return render(request, 'categories.html', {'categories': get_all_categories()})
 

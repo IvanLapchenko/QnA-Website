@@ -26,10 +26,40 @@ This is a simple Q&A website where users can post questions and answers.
 4. Enter your answer in the "Add an Answer" section and click "Submit"
 5. To edit or delete a question or answer, click on the "Edit" or "Delete" button next to it
 
-## Contributing
+# Running the Project with Docker Compose
 
-Contributions are welcome! If you notice a bug or have a feature request, please open an issue. If you would like to contribute code, please open a pull request with your changes.
+This project is designed to be easily run using Docker Compose, which simplifies the setup of the required services such as the application, PostgreSQL database, and Redis cache. Follow the steps below to get started:
 
-## License
+## Prerequisites
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+Before you begin, make sure you have the following software installed on your system:
+
+- Docker: [Installation Guide](https://docs.docker.com/get-docker/)
+- Docker Compose: [Installation Guide](https://docs.docker.com/compose/install/)
+
+## Steps
+
+1. **Clone the Repository:**
+
+   ```bash
+   git clone https://github.com/IvanLapchenko/QnA-Website
+   cd QnA-Website
+   ```
+2. **Docker compose application**
+
+   ```bash
+   docker compose up
+    ```
+
+3. **Create superuser (admin, admin)**
+
+   ```bash
+   docker exec -it <id/name of container with django app> bash
+   ./create_superuser.sh 
+   ```
+   
+4. **Access the application**
+
+Go to the http://localhost:80/admin, login with username and password for superuser(admin) and add some categories.
+
+You're good to go:)
