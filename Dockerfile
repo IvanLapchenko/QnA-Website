@@ -1,20 +1,20 @@
-# Use an official Python runtime as the base image
-FROM python:3.9
+FROM python
 
-# Set the working directory in the container
 WORKDIR /app
 
-# Copy the requirements.txt file to the container
-COPY requirements.txt .
-
-# Install the project dependencies
-RUN pip install -r requirements.txt
-
-# Copy the project files to the container
 COPY . .
 
-# Expose the port the Django application will run on
+RUN pip install -r requirements.txt
+
+ENV POSTGRES_USER='postgres'
+    POSTGRES_HOST='db'
+    POSTGRES_PASSWORD='postgres'
+    POSTGRES_DATABASE='django'
+
+
 EXPOSE 8000
 
-# Set the entry point for the container
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+RUN chmod +x /app/entrypoint.sh
+
+ENTRYPOINT ["/app/entrypoint.sh"]
+

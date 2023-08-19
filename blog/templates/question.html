@@ -21,7 +21,7 @@
             </p>
 
             {% for answer in answers %}
-            <div class="card mb-3 d-flex flex-row">
+            <div class="card mb-3 d-flex flex-row border-0">
                 <div class="voteDiv">
                     <form action="/answer/upvote/{{ answer.id }}">
                         <button type="submit" class="votes upvote"></button>
@@ -42,7 +42,7 @@
             </div>
             {% endfor %}
 
-            <div class="card mb-3">
+            <div class="card mb-3 border-0">
                 <form class="text-center mt-2" method="post" action="/create_answer">
                     {% csrf_token %}
                     {{ answer_form.as_p }}

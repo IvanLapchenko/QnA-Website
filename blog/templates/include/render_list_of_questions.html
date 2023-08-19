@@ -1,5 +1,5 @@
     {% for question in questions %}
-        <div class="card">
+        <div class="card m-2 border-0">
             <div class="card-body">
                 <h5 class="card-title">
                     <a href="{% url 'question' %}?pk={{ question.id }}">{{ question.title }}</a>

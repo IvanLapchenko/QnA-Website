@@ -1,4 +1,7 @@
 plans.txt
 newenv
+.gitignore
+
+
 mirgrations
 __pycache__/
